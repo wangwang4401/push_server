@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>1111111111111111111111111111111</title>
+    <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/socket.io/1.3.6/socket.io.min.js"></script>
+</head>
+<body>
+<div id="result"></div>
+<script type="text/javascript" charset="utf-8">
+    var socket = io.connect('http://localhost:5000');
+    socket.on('connect', function() {
+        socket.emit('my event', {data: 'I\'m connected!'});
+    });
+
+    // 添加一个连接监听器
+    socket.on('message', function (data) {
+        document.getElementById("result").innerHTML += data + "<br />";
+
+    });
+    socket.on('emitMessage', function (data) {
+        document.getElementById("result").innerHTML += data.hello + "<br />";
+
+    });
+
+    // 添加一个关闭连接的监听器
+    socket.on('disconnect', function () {
+        socket.emit('my event', {data: 'I\'m disconnected!'});
+    });
+
+    // 通过Socket发送一条消息到服务器
+    function sendMessageToServer(message) {
+        socket.send(message);
+    }
+
+</script>
+</body>
+</html>
