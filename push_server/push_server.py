@@ -17,7 +17,7 @@ def hello_world():
 @socketio.on('my event')
 def my_event(message):
     print(message['data'])
-    send('66666', broadcast=True)
+    send('welcome to Here!')
 
 
 # @socketio.on('connect')
