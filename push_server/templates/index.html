@@ -33,6 +33,33 @@
         socket.send(message);
     }
 
+    function joinGame() {
+        var name = document.getElementById("name").value
+        if (name.length < 6 || name.length >16) {
+            alert("名字长度请保持在6-16位")
+        }else {
+            socket.emit('join', {username: name})
+        }
+
+    }
+    
+    function move() {
+        var name = document.getElementById("name").value
+        if (name.length < 6 || name.length >16) {
+            alert("名字长度请保持在6-16位")
+        }else {
+            var coordinate = [Math.ceil(Math.random()*10000) , Math.ceil(Math.random()*10000)]
+            socket.emit('move', {username: name,  coordinate: coordinate})
+        }
+
+
+    }
+
 </script>
+<div>
+    姓名：<input type="text" id="name" />
+    <input type="button" value="join" onclick="joinGame()">
+    <input type="button" value="move" onclick="move()">
+</div>
 </body>
 </html>
