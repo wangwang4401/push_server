@@ -1,3 +1,5 @@
+# -*- coding: utf-8 -*-
+import random
 from time import sleep
 
 from flask import Flask, render_template
@@ -14,41 +16,56 @@ def hello_world():
     return render_template('index.html')
 
 
-@socketio.on('my event')
-def my_event(message):
-    print(message['data'])
-    send('welcome to Here!')
+@socketio.on('connect_event')
+def connect_event(data):
+    pass
+    # socketio.emit('connect_success', 'welcome!', broadcast=False)
 
 
-# @socketio.on('connect')
-# def my_event(message):
-#     print(message['data'])
+coordinates = {}
+
 
 @socketio.on('join')
 def on_join(data):
     username = data['username']
-    print username + ' join'
-    send(username + ' join', broadcast=True)
-    # room = data['room']
-    # join_room(room)
-    # send(username + ' join', room=room)
+    coordinate = [random.randint(0, 1476), random.randint(0, 900)]
+    socketio.emit('add_user', {'username': username, 'coordinate': coordinate}, broadcast=True)
+    coordinates.update({username: coordinate})
+    for key in coordinates.keys():
+        socketio.emit('user_move', {'username': key, 'coordinate': coordinates.get(key)})
+
+        # print username + ' join'
+        # send(username + ' join', broadcast=True)
+        # room = data['room']
+        # join_room(room)
+        # send(username + ' join', room=room)
 
 
 @socketio.on('move')
 def on_move(data):
-    print data
     username = data['username']
-    print username + ' move to ', data['coordinate']
-    send(username + ' move to ' + json.dumps(data['coordinate']), broadcast=True)
+    coordinate = data['coordinate']
+    socketio.emit('user_move', {'username': username, 'coordinate': coordinate}, broadcast=True)
+    coordinates.update({username: coordinate})
+    # send(username + ' move to ' + json.dumps(data['coordinate']), broadcast=True)
 
 
 @socketio.on('leave')
 def on_leave(data):
     username = data['username']
-    send(username + ' leave', broadcast=True)
+    socketio.emit('user_leave', {'username': username}, broadcast=True)
+    del coordinates[username]
     # room = data['room']
     # leave_room(room)
     # send(username + ' leave', room=room)
+
+
+# 跟leave重复
+# @socketio.on('disconnect')
+# def on_disconnect(data):
+#     username = data['username']
+#     socketio.emit('user_leave', {'username': username}, broadcast=True)
+#     send(username + ' leave', broadcast=True)
 
 
 if __name__ == '__main__':

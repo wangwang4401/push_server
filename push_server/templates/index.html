@@ -2,70 +2,25 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>1111111111111111111111111111111</title>
+    <title>push_server</title>
     <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/socket.io/1.3.6/socket.io.min.js"></script>
+    <script type="text/javascript" src = "../static/js/jquery-3.1.1.min.js"></script>
+    <script type="text/javascript" src = "../static/js/event_listener.js"></script>
 </head>
 <body onbeforeunload="checkLeave()">
-<div id="result"></div>
 <script type="text/javascript" charset="utf-8">
-    var socket = io.connect('http://localhost:5000');
-    socket.on('connect', function() {
-        socket.emit('my event', {data: 'I\'m connected!'});
-    });
-
-    // 添加一个连接监听器
-    socket.on('message', function (data) {
-        document.getElementById("result").innerHTML += data + "<br />";
-
-    });
-    socket.on('emitMessage', function (data) {
-        document.getElementById("result").innerHTML += data.hello + "<br />";
-
-    });
-
-    // 添加一个关闭连接的监听器
-    socket.on('disconnect', function () {
-        socket.emit('my event', {data: 'I\'m disconnected!'});
-    });
-
-    // 通过Socket发送一条消息到服务器
-    function sendMessageToServer(message) {
-        socket.send(message);
-    }
-
-    function joinGame() {
-        var name = document.getElementById("name").value
-        if (name.length < 6 || name.length >16) {
-            alert("名字长度请保持在6-16位")
-        }else {
-            socket.emit('join', {username: name})
-        }
-
-    }
-    
-    function move() {
-        var name = document.getElementById("name").value
-        if (name.length < 6 || name.length >16) {
-            alert("名字长度请保持在6-16位")
-        }else {
-            var coordinate = [Math.ceil(Math.random() * 10000), Math.ceil(Math.random() * 10000)]
-            socket.emit('move', {username: name, coordinate: coordinate})
-        }
-    }
-    function checkLeave(){
-        var name = document.getElementById("name").value
-        if (name.length < 6 || name.length >16) {
-            alert("名字长度请保持在6-16位")
-        }else {
-            socket.emit('leave', {username: name})
-        }
-　　　}
-
 </script>
-<div>
-    姓名：<input type="text" id="name" />
-    <input type="button" value="join" onclick="joinGame()">
-    <input type="button" value="move" onclick="move()">
+<div style="background-color:#FFD700;height: 900px; width:20%;float:left;">
+    <div>
+        姓名：<input type="text" id="name"/> <br/>
+        <input type="button" value="join" onclick="joinGame()">
+        <input type="button" value="move" onclick="move()">
+    </div>
+    <div id="result"></div>
 </div>
+
+<div id="GameBoard" style="background-color:#AAD700; height: 900px; width: 80%; float: right">
+</div>
+
 </body>
 </html>
