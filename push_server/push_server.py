@@ -54,7 +54,8 @@ def on_move(data):
 def on_leave(data):
     username = data['username']
     socketio.emit('user_leave', {'username': username}, broadcast=True)
-    del coordinates[username]
+    if coordinates.get(username):
+        del coordinates[username]
     # room = data['room']
     # leave_room(room)
     # send(username + ' leave', room=room)

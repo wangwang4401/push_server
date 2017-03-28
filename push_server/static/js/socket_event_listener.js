@@ -23,9 +23,9 @@ socket.on('add_user', function (data) {
     $("#result").append(data["username"] + " add <br />")
     var coordinate = data["coordinate"]
     // 动态增加控件
-    $("#GameBoard").append("<div id=\"" + data["username"] + "\"></div>")
+    $("#GameBoard").append("<div id=\"" + data["username"] + "\">" + data["username"] + "</div>")
     $("#" + data["username"]).css("position", "relative")
-    $("#" + data["username"]).css("background-color", "black")
+    $("#" + data["username"]).css("background-color", "red")
     $("#" + data["username"]).css("width", "80px")
     $("#" + data["username"]).css("height", "80px")
     $("#" + data["username"]).css("left", coordinate[0] + "px")
@@ -35,9 +35,9 @@ socket.on('add_user', function (data) {
 socket.on('user_move', function (data) {
     if ($("#" + data["username"]).length < 1)
     {
-        $("#GameBoard").append("<div id=\"" + data["username"] + "\"></div>")
+        $("#GameBoard").append("<div id=\"" + data["username"] + "\">" + data["username"] + "</div>")
         $("#" + data["username"]).css("position", "relative")
-        $("#" + data["username"]).css("background-color", "black")
+        $("#" + data["username"]).css("background-color", "red")
         $("#" + data["username"]).css("width", "80px")
         $("#" + data["username"]).css("height", "80px")
     }
@@ -68,33 +68,10 @@ function sendMessageToServer(message) {
     socket.send(message);
 }
 
-function joinGame() {
-    var name = $("#name").val()
-    if (name.length < 6 || name.length > 16) {
-        alert("名字长度请保持在6-16位")
-    } else {
-        socket.emit('join', {username: name})
-    }
-
+function getSocket() {
+    return socket
 }
 
-function move() {
-    var name = $("#name").val()
-    var y = 0;
-    var cx = parseInt(Math.random() * (1476 - y + 1) + y);
-    var cy = parseInt(Math.random() * (900 - y + 1) + y);
-    if (name.length < 6 || name.length > 16) {
-        alert("名字长度请保持在6-16位")
-    } else {
-        var coordinate = [cx, cy]
-        socket.emit('move', {username: name, coordinate: coordinate})
-    }
-}
-function checkLeave() {
-    var name = $("#name").val()
-    if (name.length < 6 || name.length > 16) {
-        alert("名字长度请保持在6-16位")
-    } else {
-        socket.emit('leave', {username: name})
-    }
-}
+
+
+
